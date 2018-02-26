@@ -214,9 +214,16 @@ class VideoHelper
         if (!empty($token) && !empty($photoId) && !empty($host)) {
 
             $api_request    = $host.'/api/photo/list?token='.$token.'&photo_id='.$photoId.'&format=xml';
-            //TODO Replace wp_remote_retrieve_body && wp_remote_get to remove wp requirement.
-            $xmlResponse = wp_remote_retrieve_body( wp_remote_get( $api_request ) );
-            $xml = simplexml_load_string($xmlResponse);
+
+            try{
+                //TODO Replace wp_remote_retrieve_body && wp_remote_get to remove wp requirement.
+                $xmlResponse = wp_remote_retrieve_body( wp_remote_get( $api_request ) );
+                $xml = simplexml_load_string($xmlResponse);
+            }
+            catch(\Exception $e)
+            {
+                throw new \Exception("Request Error: ".$e);
+            }
 
             if(empty(self::xml_attribute($xml->photo, 'large_download') ?? ''))
             {
