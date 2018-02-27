@@ -199,8 +199,39 @@ class VideoHelper
     public static function getYoutubeThumb($id)
     {
         if (!empty($id)) {
-            return "https://img.youtube.com/vi/".$id."/sddefault.jpg";
+            return self::getBestYoutubeThumb($id);
         }
+
+        return false;
+    }
+
+    /**
+     * @param $id
+     * @param string $youtubeHost
+     * @return bool|mixed
+     */
+    public static function getBestYoutubeThumb($id, $youtubeHost = "https://img.youtube.com/vi/")
+    {
+        $thumbResolutions = array(
+            //1920x1080
+            'maxQualityThumb' => $youtubeHost.$id."/maxresdefault.jpg",
+            //640x480
+            'standardQualityThumb' => $youtubeHost.$id."/sddefault.jpg",
+            //480x360
+            'highQualityThumb' => $youtubeHost.$id."/hqdefault.jpg",
+            //480x360 the first thumb that we can possibly get. Player Background Thumbnail
+            'playerBackgroundThumb' => $youtubeHost.$id."/0.jpg"
+        );
+
+        foreach($thumbResolutions as $thumbUrl)
+        {
+            //If thumb doesn't exist we will get a 404
+            if(@file_get_contents( urldecode($thumbUrl) )){
+                return $thumbUrl;
+            }
+        }
+
+        return false;
     }
 
     /**
