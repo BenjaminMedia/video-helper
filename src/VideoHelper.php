@@ -88,18 +88,18 @@ class VideoHelper
     {
         // match: <iframe width="560" height="315" src="https://www.youtube.com/embed/dXxEIZTkqMg" ...
         // match: https://www.youtube.com/embed/dXxEIZTkqMg
-        if (preg_match('#/embed/([^"$]+)#', $input, $matches)) {
+        if (preg_match('#/embed/([^\?&"]+)#', $input, $matches)) {
             return $matches[1];
         }
 
         // match: https://www.youtube.com/watch?v=dXxEIZTkqMg&feature=youtu.be
         // match: https://www.youtube.com/watch?vi=dXxEIZTkqMg&feature=youtu.be
-        if (preg_match('#vi?=([^&$]+)#', $input, $matches)) {
+        if (preg_match('#vi?=([^&]+)#', $input, $matches)) {
             return $matches[1];
         }
 
         // match: https://youtu.be/4vXkI1zYyDo
-        if (preg_match('#//youtu.be/([^$&/]+)#', $input, $matches)) {
+        if (preg_match('#//youtu.be/([^\?&"/]+)#', $input, $matches)) {
             return $matches[1];
         }
 
@@ -257,7 +257,7 @@ class VideoHelper
      */
     public static function getTwentyThreePhotoId($embed)
     {
-        if (preg_match('/id=([^$"]+)/', $embed, $matches)) {
+        if (preg_match('/id=([^"]+)/', $embed, $matches)) {
             return $matches[1];
         }
 
